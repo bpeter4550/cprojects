@@ -50,6 +50,37 @@ static gboolean update_all_cores(gpointer data) {
 }
 
 int main(int argc, char *argv[]) {
+    GtkWidget *window;
+    GtkWidget *vbox;
+
+    gtk_init(&argc, &argv);
+
+    // Настройка главного окна
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(window), "Монитор 4 ядер i7");
+    gtk_window_set_default_size(GTK_WINDOW(window), 280, 200);
+    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+    // Вертикальный контейнер для размещения строк
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+    gtk_container_add(GTK_CONTAINER(window), vbox);
+    gtk_container_set_border_width(GTK_CONTAINER(vbox), 15);
+
+    // Создание 4 красивых текстовых меток
+    PangoFontDescription *font_desc = pango_font_description_from_string("Monospace Bold 16");
+    for (int i = 0; i < 4; i++) {
+        labels[i] = gtk_label_new("Загрузка...");
+        gtk_widget_override_font(labels[i], font_desc);
+        gtk_box_pack_start(GTK_BOX(vbox), labels[i], TRUE, TRUE, 0);
+    }
+    pango_font_description_free(font_desc);
+
+    // Снимаем первые показания и запускаем ежесекундный таймер
+    update_all_cores(NULL);
+    g_timeout_add(1000, update_all_cores, NULL);
+
+    gtk_widget_show_all(window);
+    gtk_main();
 
     return 0;
 }
