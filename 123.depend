@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1779800843 source:/home/artem/Documents/123/123/main.c
+1779807407 source:/home/artem/Documents/123/123/main.c
 	<gtk/gtk.h>
 	<stdio.h>
 	<stdlib.h>
